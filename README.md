@@ -2,7 +2,13 @@
 
 A production-ready social network feed built with React, TypeScript, and Vite.
 
-## How to Run
+This repository also includes an optional **Django + Django REST Framework backend**
+that mirrors the official CodeLeap API contract, allowing the project to be run
+as a fullstack application without breaking frontend compatibility.
+
+---
+
+## How to Run (Frontend)
 
 ```bash
 # Install dependencies
@@ -16,55 +22,68 @@ npm run build
 
 # Preview production build
 npm run preview
-```
 
-## Architecture Overview
+---
 
-### Tech Stack
-- **React 19 + TypeScript** – Type-safe component-driven UI.
-- **Vite** – Fast dev server and optimized builds.
-- **Tailwind CSS v4** – Utility-first styling with zero config.
-- **TanStack React Query** – Server-state management with caching, invalidation, and loading/error states.
-- **date-fns** – Lightweight date formatting ("X minutes ago").
-- **react-router-dom** – Client-side routing between Signup and Feed.
+Project Structure
 
-### Project Structure
-
-```
 src/
   api/
-    http.ts             # Fetch wrapper with base URL and error handling
-    posts.ts            # Typed API endpoints for CRUD operations
+    http.ts              # Fetch wrapper with base URL and error handling
+    posts.ts             # Typed API endpoints for CRUD operations
   components/
-    Header.tsx          # Blue header bar
+    Header.tsx           # Blue header bar
     CreatePostCard.tsx   # Form card for creating posts
     PostCard.tsx         # Individual post display with owner actions
-    Modal.tsx           # Generic accessible modal (ESC, overlay click, focus trap)
+    Modal.tsx            # Generic accessible modal (ESC, overlay click, focus trap)
     DeletePostModal.tsx  # Confirmation modal for deleting posts
     EditPostModal.tsx    # Modal for editing post title and content
   hooks/
     useUsername.ts       # localStorage abstraction for username persistence
-    usePosts.ts         # React Query hooks for all post operations
+    usePosts.ts          # React Query hooks for all post operations
   pages/
     SignupPage.tsx       # Username entry screen
     FeedPage.tsx         # Main feed with create form and posts list
   types/
-    post.ts             # Post type definition
-  App.tsx               # Router setup and query client provider
-  main.tsx              # Entry point
+    post.ts              # Post type definition
+  App.tsx                # Router setup and query client provider
+  main.tsx               # Entry point
+
+---
+
+Running the Backend
+
+cd backend
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+---
+
+The API will be available at:
+
+http://localhost:8000/careers/
+
+---
+
+API Switching
+
+If no environment variable is provided, the application automatically falls back to:
+https://dev.codeleap.co.uk/careers/
+
+To use the local backend, create a .env file in the frontend directory:
+VITE_API_BASE_URL=http://localhost:8000/careers/
+
+---
+
+## Commit History
+
+```text
+feat(frontend): implement CodeLeap CRUD UI and API integration
+feat(backend): add Django REST API for posts
+chore(frontend): support configurable API base URL
+docs: add fullstack README with backend setup and API switching
 ```
 
-### Design Decisions
-- **React Query** handles server state, caching, and automatic refetching after mutations — no manual state syncing needed.
-- **Generic Modal** component uses the native `<dialog>` element for built-in accessibility (ESC to close, focus trapping).
-- **localStorage** persists the username across sessions; the hook abstracts read/write logic.
-- **No Redux** — React Query covers server state; local UI state is handled with `useState`.
-
-## Known Limitations
-- No pagination — all posts are fetched in a single request.
-- No logout functionality.
-- Username is stored in localStorage only (no server-side authentication).
-- No optimistic updates — UI waits for server confirmation before reflecting changes.
-
-## Deployment
-<!-- Add deployment link here -->
