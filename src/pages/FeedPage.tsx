@@ -30,7 +30,7 @@ export default function FeedPage() {
                   key={i}
                   className="animate-pulse overflow-hidden rounded-2xl border border-[#ccc]"
                 >
-                  <div className="h-18 bg-[#bdd0f7]" />
+                  <div className="h-[4.5rem] bg-[#bdd0f7]" />
                   <div className="space-y-3 p-6">
                     <div className="h-4 w-1/3 rounded bg-[#e5e5e5]" />
                     <div className="h-4 w-full rounded bg-[#e5e5e5]" />

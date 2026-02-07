@@ -31,7 +31,7 @@ export default function SignupPage() {
         <input
           id="username"
           type="text"
-          placeholder="John doe"
+          placeholder="John Doe"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="mb-6 w-full rounded-lg border border-[#ccc] px-3 py-2 text-sm placeholder:text-[#ccc] focus:border-[#7695EC] focus:outline-none"
