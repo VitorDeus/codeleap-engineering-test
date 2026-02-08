@@ -65,3 +65,64 @@ class TestPostsAPI:
         listing = api.get("/careers/")
         ids = [p["id"] for p in listing.json()["results"]]
         assert post_id not in ids
+
+    def test_list_ordered_by_most_recent_first(self, api: APIClient):
+        api.post(
+            "/careers/",
+            {"username": "a", "title": "First", "content": "older"},
+            format="json",
+        )
+        api.post(
+            "/careers/",
+            {"username": "b", "title": "Second", "content": "newer"},
+            format="json",
+        )
+
+        response = api.get("/careers/")
+        results = response.json()["results"]
+        assert len(results) >= 2
+        # Most recent should come first
+        first_dt = results[0]["created_datetime"]
+        second_dt = results[1]["created_datetime"]
+        assert first_dt >= second_dt
+
+    def test_id_is_immutable_on_patch(self, api: APIClient):
+        create = api.post(
+            "/careers/",
+            {"username": "vitor", "title": "Original", "content": "Body"},
+            format="json",
+        )
+        original_id = create.json()["id"]
+
+        response = api.patch(
+            f"/careers/{original_id}/",
+            {"id": 999, "title": "Changed"},
+            format="json",
+        )
+
+        assert response.status_code == 200
+        assert response.json()["id"] == original_id
+
+    def test_create_rejects_empty_title(self, api: APIClient):
+        response = api.post(
+            "/careers/",
+            {"username": "vitor", "title": "   ", "content": "Body"},
+            format="json",
+        )
+        assert response.status_code == 400
+
+    def test_create_rejects_empty_content(self, api: APIClient):
+        response = api.post(
+            "/careers/",
+            {"username": "vitor", "title": "Title", "content": "  "},
+            format="json",
+        )
+        assert response.status_code == 400
+
+    def test_create_rejects_empty_username(self, api: APIClient):
+        response = api.post(
+            "/careers/",
+            {"username": "   ", "title": "Title", "content": "Body"},
+            format="json",
+        )
+        assert response.status_code == 400

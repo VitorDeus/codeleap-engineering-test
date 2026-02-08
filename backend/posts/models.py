@@ -8,7 +8,7 @@ class Post(models.Model):
     created_datetime = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["created_datetime"]
+        ordering = ["-created_datetime"]
 
     def __str__(self):
         return f"{self.username} – {self.title}"
