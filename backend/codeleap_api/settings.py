@@ -1,6 +1,7 @@
 """
 Django settings for codeleap_api project.
 """
+
 import os
 from pathlib import Path
 

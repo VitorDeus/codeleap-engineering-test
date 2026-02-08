@@ -1,6 +1,7 @@
 """
 WSGI config for codeleap_api project.
 """
+
 import os
 
 from django.core.wsgi import get_wsgi_application

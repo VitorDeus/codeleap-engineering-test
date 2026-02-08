@@ -1,4 +1,5 @@
-from rest_framework import viewsets, mixins
+from rest_framework import mixins, viewsets
+
 from .models import Post
 from .serializers import PostSerializer
 
