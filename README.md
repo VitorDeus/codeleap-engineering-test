@@ -99,6 +99,29 @@ VITE_API_BASE_URL=http://localhost:8000/careers/
 
 ---
 
+## Frontend Deployment (Vercel)
+
+The frontend is deployed on Vercel.
+
+🔗 **Live URL:** _https://your-app.vercel.app_ <!-- replace with actual URL after deploy -->
+
+### How to deploy
+
+1. Go to [vercel.com](https://vercel.com) and sign in with your GitHub account.
+2. Click **"Add New… → Project"** and import this repository.
+3. In **Root Directory**, keep it as `.` (the repo root — Vercel auto-detects Vite).
+4. Under **Environment Variables**, add:
+   | Name | Value |
+   |------|-------|
+   | `VITE_API_BASE_URL` | `https://dev.codeleap.co.uk/careers/` |
+5. Click **Deploy**.
+
+> The `VITE_API_BASE_URL` variable is baked at build time. Set it to
+> whatever backend you want the production build to hit. If omitted, the
+> app falls back to `https://dev.codeleap.co.uk/careers/`.
+
+---
+
 ## Commit History
 
 ```text
