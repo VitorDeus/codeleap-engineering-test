@@ -54,7 +54,11 @@ src/
 
 ---
 
-## Running the Backend
+## Running the Full Stack Locally
+
+Open **two separate terminals**:
+
+**Terminal 1 — Backend:**
 
 ```bash
 cd backend
@@ -62,10 +66,23 @@ python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver 127.0.0.1:8000
 ```
 
-The API will be available at: http://localhost:8000/careers/
+**Terminal 2 — Frontend:**
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:5173 in your browser. The Vite dev server proxies
+`/careers/` requests to the Django backend automatically — no environment
+variables needed for local development.
+
+> **Tip:** Make sure your `.env` has `VITE_API_BASE_URL=` (empty). This is the
+> default, which enables the Vite proxy. Only set it to a full URL when building
+> for production (e.g. Vercel).
 
 ---
 
@@ -81,12 +98,6 @@ Migrations run automatically on container startup. The frontend remains local:
 
 ```bash
 npm run dev
-```
-
-Make sure your `.env` has:
-
-```
-VITE_API_BASE_URL=http://localhost:8000/careers/
 ```
 
 ---
@@ -128,13 +139,23 @@ black --check .
 
 ## API Switching
 
-If no environment variable is provided, the application automatically falls back to:
-`https://dev.codeleap.co.uk/careers/`
+The `VITE_API_BASE_URL` environment variable controls where API requests go:
 
-To use the local backend, create a `.env` file in the project root:
+| Value | Behaviour |
+|-------|-----------|
+| _(empty / unset)_ | Relative paths (`/careers/`). In dev, Vite proxies to `127.0.0.1:8000`. |
+| `https://codeleap-engineering-test-ip1k.onrender.com` | Production — requests go directly to Render. |
+
+For **local development**, leave it empty (default in `.env`):
 
 ```
-VITE_API_BASE_URL=http://localhost:8000/careers/
+VITE_API_BASE_URL=
+```
+
+For **production builds** (e.g. on Vercel), set it to the backend URL:
+
+```
+VITE_API_BASE_URL=https://codeleap-engineering-test-ip1k.onrender.com
 ```
 
 ---
@@ -143,7 +164,7 @@ VITE_API_BASE_URL=http://localhost:8000/careers/
 
 The backend can be deployed on **Render** or **Railway** as a Python web service.
 
-🔗 **Live API URL:** _https://your-api.onrender.com/careers/_ <!-- replace with actual URL after deploy -->
+🔗 **Live API URL:** https://codeleap-engineering-test-ip1k.onrender.com/careers/
 
 ### Environment Variables
 
@@ -152,7 +173,7 @@ The backend can be deployed on **Render** or **Railway** as a Python web service
 | `DJANGO_SECRET_KEY` | _(generate a strong random key)_ |
 | `DJANGO_DEBUG` | `False` |
 | `DJANGO_ALLOWED_HOSTS` | `.onrender.com` or `.railway.app` |
-| `CORS_ALLOWED_ORIGINS` | `https://your-app.vercel.app` |
+| `CORS_ALLOWED_ORIGINS` | `https://codeleap-engineering-test-delta.vercel.app` |
 
 > If no `DATABASE_URL` is set the backend defaults to **SQLite**, which is
 > fine for demos but will reset on each Render deploy. For persistence,
@@ -182,7 +203,7 @@ The backend can be deployed on **Render** or **Railway** as a Python web service
 
 The frontend is deployed on Vercel.
 
-🔗 **Live URL:** _https://your-app.vercel.app_ <!-- replace with actual URL after deploy -->
+🔗 **Live URL:** https://codeleap-engineering-test-delta.vercel.app/
 
 ### How to deploy
 
@@ -192,12 +213,57 @@ The frontend is deployed on Vercel.
 4. Under **Environment Variables**, add:
    | Name | Value |
    |------|-------|
-   | `VITE_API_BASE_URL` | `https://dev.codeleap.co.uk/careers/` |
+   | `VITE_API_BASE_URL` | `https://codeleap-engineering-test-ip1k.onrender.com` |
 5. Click **Deploy**.
 
 > The `VITE_API_BASE_URL` variable is baked at build time. Set it to
-> whatever backend you want the production build to hit. If omitted, the
-> app falls back to `https://dev.codeleap.co.uk/careers/`.
+> whatever backend **host** you want the production build to hit (without
+> `/careers/`). If omitted, the app falls back to
+> `https://codeleap-engineering-test-ip1k.onrender.com`.
+
+---
+
+## Quick Reference Checklist
+
+### Live Links
+
+| Service | URL |
+|---------|-----|
+| **Frontend** (Vercel) | https://codeleap-engineering-test-delta.vercel.app |
+| **API** (Render) | https://codeleap-engineering-test-ip1k.onrender.com/careers/ |
+
+### How to Run Locally
+
+```bash
+# Terminal 1 — Backend
+cd backend && python manage.py runserver
+
+# Terminal 2 — Frontend
+npm run dev
+```
+
+Open http://localhost:5173.
+
+### Minimum Environment Variables
+
+| Variable | Local (`.env`) | Vercel | Render |
+|----------|---------------|--------|--------|
+| `VITE_API_BASE_URL` | `http://127.0.0.1:8000/careers/` | `https://codeleap-engineering-test-ip1k.onrender.com/careers/` | — |
+| `DJANGO_ALLOWED_HOSTS` | — | — | `.onrender.com` |
+| `CORS_ALLOWED_ORIGINS` | — | — | `https://codeleap-engineering-test-delta.vercel.app` |
+
+### How to Run Tests
+
+```bash
+npm run test:run    # Frontend — 14 tests (Vitest)
+cd backend && pytest -q   # Backend — 8 tests (pytest)
+```
+
+### Note on Render Free Tier
+
+> Render free-tier services spin down after ~15 min of inactivity.
+> The first request after a cold start may take **30–60 seconds**.
+> Subsequent requests are fast.
 
 ---
 

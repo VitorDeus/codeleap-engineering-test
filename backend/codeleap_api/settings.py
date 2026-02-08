@@ -12,7 +12,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-dev-only-change-in-production",
 )
 
-DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() in ("true", "1", "yes")
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
@@ -89,13 +89,16 @@ CORS_ALLOWED_ORIGINS = (
     else [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://codeleap-engineering-test-delta.vercel.app",
     ]
 )
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+
+if not DEBUG:
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
