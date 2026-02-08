@@ -22,11 +22,13 @@ npm run build
 
 # Preview production build
 npm run preview
+```
 
 ---
 
-Project Structure
+## Project Structure
 
+```
 src/
   api/
     http.ts              # Fetch wrapper with base URL and error handling
@@ -48,23 +50,22 @@ src/
     post.ts              # Post type definition
   App.tsx                # Router setup and query client provider
   main.tsx               # Entry point
+```
 
 ---
 
 ## Running the Backend
 
+```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
+```
 
----
-
-## The API will be available at:
-
-http://localhost:8000/careers/
+The API will be available at: http://localhost:8000/careers/
 
 ---
 
@@ -83,19 +84,58 @@ npm run dev
 ```
 
 Make sure your `.env` has:
+
 ```
 VITE_API_BASE_URL=http://localhost:8000/careers/
 ```
 
 ---
 
+## Running Tests
+
+### Frontend (Vitest)
+
+```bash
+# Run once
+npm run test:run
+
+# Watch mode
+npm run test
+
+# With coverage
+npm run test:coverage
+```
+
+### Backend (pytest)
+
+```bash
+cd backend
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pytest -q
+```
+
+### Linting (Backend)
+
+```bash
+cd backend
+ruff check .
+black --check .
+```
+
+> CI runs all of the above automatically via GitHub Actions on every push and PR.
+
+---
+
 ## API Switching
 
 If no environment variable is provided, the application automatically falls back to:
-https://dev.codeleap.co.uk/careers/
+`https://dev.codeleap.co.uk/careers/`
 
-To use the local backend, create a .env file in the frontend directory:
+To use the local backend, create a `.env` file in the project root:
+
+```
 VITE_API_BASE_URL=http://localhost:8000/careers/
+```
 
 ---
 
@@ -167,6 +207,11 @@ The frontend is deployed on Vercel.
 feat(frontend): implement CodeLeap CRUD UI and API integration
 feat(backend): add Django REST API for posts
 chore(frontend): support configurable API base URL
-docs: add fullstack README with backend setup and API switching
+feat(docker): add docker-compose for backend local development
+test: add golden quality layer (tests, lint, CI)
+chore(backend): align timezone settings and remove warnings
+test: add additional coverage for routing, ownership, and ordering
+chore(frontend): prepare frontend for Vercel deployment
+chore(backend): prepare Django API for production deployment
 ```
 
