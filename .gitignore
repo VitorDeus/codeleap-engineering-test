@@ -21,3 +21,14 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+db.sqlite3
+*.log
+staticfiles/
