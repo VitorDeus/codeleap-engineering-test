@@ -51,7 +51,7 @@ src/
 
 ---
 
-Running the Backend
+## Running the Backend
 
 cd backend
 python -m venv .venv
@@ -62,13 +62,34 @@ python manage.py runserver
 
 ---
 
-The API will be available at:
+## The API will be available at:
 
 http://localhost:8000/careers/
 
 ---
 
-API Switching
+## Running Backend with Docker (Optional)
+
+```bash
+docker compose up --build
+```
+
+The API will be available at http://localhost:8000/careers/
+
+Migrations run automatically on container startup. The frontend remains local:
+
+```bash
+npm run dev
+```
+
+Make sure your `.env` has:
+```
+VITE_API_BASE_URL=http://localhost:8000/careers/
+```
+
+---
+
+## API Switching
 
 If no environment variable is provided, the application automatically falls back to:
 https://dev.codeleap.co.uk/careers/
