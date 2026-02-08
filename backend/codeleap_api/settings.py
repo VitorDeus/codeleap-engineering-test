@@ -70,6 +70,10 @@ DATABASES = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ---------- Internationalization ----------
+TIME_ZONE = "UTC"
+USE_TZ = True
+
 # ---------- Django REST Framework ----------
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
