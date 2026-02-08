@@ -99,6 +99,45 @@ VITE_API_BASE_URL=http://localhost:8000/careers/
 
 ---
 
+## Backend Deployment (Render / Railway)
+
+The backend can be deployed on **Render** or **Railway** as a Python web service.
+
+🔗 **Live API URL:** _https://your-api.onrender.com/careers/_ <!-- replace with actual URL after deploy -->
+
+### Environment Variables
+
+| Name | Example value |
+|------|---------------|
+| `DJANGO_SECRET_KEY` | _(generate a strong random key)_ |
+| `DJANGO_DEBUG` | `False` |
+| `DJANGO_ALLOWED_HOSTS` | `.onrender.com` or `.railway.app` |
+| `CORS_ALLOWED_ORIGINS` | `https://your-app.vercel.app` |
+
+> If no `DATABASE_URL` is set the backend defaults to **SQLite**, which is
+> fine for demos but will reset on each Render deploy. For persistence,
+> attach a managed Postgres and set `DATABASE_URL`.
+
+### Deploy on Render
+
+1. Go to [render.com](https://render.com) → **New → Web Service**.
+2. Connect your GitHub repo.
+3. Set **Root Directory** to `backend`.
+4. **Build Command:** `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput`
+5. **Start Command:** `gunicorn codeleap_api.wsgi --bind 0.0.0.0:$PORT`
+6. Add the environment variables listed above.
+7. Click **Create Web Service**.
+
+### Deploy on Railway
+
+1. Go to [railway.app](https://railway.app) → **New Project → Deploy from GitHub**.
+2. Select this repo. Railway auto-detects the `Procfile`.
+3. In **Settings → Root Directory**, set to `backend`.
+4. Under **Variables**, add the environment variables listed above.
+5. Railway will build and deploy automatically.
+
+---
+
 ## Frontend Deployment (Vercel)
 
 The frontend is deployed on Vercel.

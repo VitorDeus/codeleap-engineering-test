@@ -12,7 +12,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-dev-only-change-in-production",
 )
 
-DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in ("true", "1", "yes")
+DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -92,3 +93,9 @@ CORS_ALLOWED_ORIGINS = (
 )
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
